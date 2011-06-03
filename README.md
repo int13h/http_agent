@@ -8,13 +8,14 @@ This agent adds HTTP events to Sguil
 
 ## Requirements
 
-Sguil: [http://sguil.sourceforge.net/](http://sguil.sourceforge.net/)
-httpry : [http://dumpsterventures.com/jason/httpry/](http://dumpsterventures.com/jason/httpry/)
+* Sguil: [http://sguil.sourceforge.net/](http://sguil.sourceforge.net/)
+
+* httpry : [http://dumpsterventures.com/jason/httpry/](http://dumpsterventures.com/jason/httpry/)
 
 
 ## Install
 
-1) Fetch the tarball or checkout the repository onto your sensor.
+1) Download httpry_agent
 
 2) Install and configure httpry:
 
