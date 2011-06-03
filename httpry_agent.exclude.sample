@@ -5,11 +5,11 @@
 
 # Filter by TLD's
 
-*.ca
-*.com
-*.net
-*.org
-*.co.uk
+#*.ca
+#*.com
+#*.net
+#*.org
+#*.co.uk
 
 # Filter by FQDN
 
