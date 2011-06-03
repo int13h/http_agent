@@ -1,0 +1,13 @@
+#
+# This is the excludes file for the httpry agent.
+# Place the domain names or IP addresses that you want 
+# to exclude from processing in this file. 
+# 
+
+#facebook.com
+*.google.ca
+#*.google.com
+#*.windowsupdate.com
+#*.microsoft.com
+#digg.com
+#pintumbler.org
