@@ -37,28 +37,28 @@ Start httpry with something like:
 
 There is an exclusions file which can be used in one of two ways:
 
-1) If INVERT_MATCH is set to 0 in httpry_agent.conf anything that matches an entry 
+1) If INVERT_MATCH is set to 0 in httpry_agent.conf anything that matches an entry in
    httpry_agent.exclude will be ignored.
 
-2) If INVERT_MATCH is set to 1 in httpry_agent.conf anything that matches an entry
+2) If INVERT_MATCH is set to 1 in httpry_agent.conf anything that matches an entry in
    httpry_agent.exclude will be sent to Sguild.
 
-Example 1: Match everything from the follwing TLD's (INVERT_MATCH set to 1)
+Example 1: Match everything from the following TLD's (INVERT_MATCH set to 1)
 
-*.ua
-*.ru
-*.cn
-*.lv
+`*.ua`
+`*.ru`
+`*.cn`
+`*.lv`
 
 Example 2: Ignore everything from the following FQDN's (INVERT_MATCH set to 0)
 
-*.facebook.com
-*.dropbox.com
-*.twitter.com
+`*.facebook.com`
+`*.dropbox.com`
+`*.twitter.com`
 
 ## Notes
 
-1) Unless you are doing extensive or very sepcific filtering (*.ca, *.com, *.net, *.org...) then you will want 
+1) Unless you are doing extensive or very specific filtering (*.ca, *.com, *.net, *.org...) then you will want 
    Sguild to autocat these events. These events are prefixed with "URL" so something like this will do:
 
    none||ANY||ANY||ANY||ANY||ANY||ANY||%%REGEXP%%^URL||1
