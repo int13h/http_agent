@@ -22,14 +22,6 @@ exec tclsh "$0" "$@"
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-# This is a template to use for building your own generic agents
-# for sending alerts to a Sguil server. I tried to document with
-# comments where appropriate. 
-#
-# This template will monitor your /var/log/secure file for sshd
-# systlog messages and forward them to sguil.
-#
-
 # Make sure you define the version this agent will work with. 
 set VERSION "SGUIL-0.8.0"
 
@@ -165,29 +157,61 @@ proc ProcessData { line } {
             puts "$user_agent\n"
         }
         
-        # Break the FQDN down
-        set domParts [lreverse [split $host "."] ]
+        # Strip protocol and break the FQDN down
+        regsub {^http://} $host "" cleanHost
+        set domParts [lreverse [split $cleanHost "."] ]
         set partCount [llength $domParts]
         set pHits 0
+
+        # Run through each segment and see if we match anything
+        for { set i 0 } { $i < $partCount } { incr i } {
+
+            lappend rList [lindex $domParts $i]
+            set fList [lreverse $rList]
+            set theNeedle [join $fList "."]
+
+            # Check for a broad hit in our haystack
+            set stackHit [lsearch $HAYSTACK *$theNeedle]
+
+            if { $stackHit != -1 } {
+
+                set absHit [lsearch -exact $HAYSTACK *.$theNeedle]
+
+                # See if this was an exact hit
+                if { $absHit != -1 } {
+
+                    set i $partCount
+                    set pHits $partCount
+
+                } else {
+
+                    incr pHits
       
-        for { set i 0 } { $i <= $partCount } { incr i } {
-            
-            # Check for a hit in our haystack
-            set stackHit [lsearch $HAYSTACK [lindex $domParts $i]]
-
-                if { $stackHit != -1 } {
-
-                    incr $pHits
-
                 }
-     
+
+            }
+            # If we didn't hit here, there is no match
+            if { $i == 2 && $stackHit == -1 } {
+
+                set i $partCount
+
+            }
 
         }
 
-        set stackHit [lsearch $HAYSTACK $host]
+        # When the loop is finished, if these match we got a hit
+        if { $pHits == $partCount } {
 
+            set aMatch 1
+
+        } else {
+
+            set aMatch 0
+
+        }
+        
         # If we missed our stack, we add the entry
-        if { $stackHit == 0 } {
+        if { $aMatch == 0 } {
 
             if { $EMPTY_HOST == 1 && $host == "-" } {
 
@@ -459,9 +483,7 @@ proc string2hex { s } {
 ################### MAIN ###########################
 
 # Standard options are below. If you need to add more switches,
-# put them here. For the sshd example, we add -f filename 
-# to define which file we are monitoring and -i ip to define
-# the dst ip we are monitoring.
+# put them here. 
 # 
 # GetOpts
 set state flag

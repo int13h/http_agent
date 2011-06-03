@@ -4,10 +4,19 @@
 # to exclude from processing in this file. 
 # 
 
-#facebook.com
-*.google.ca
-#*.google.com
+# Filter by TLD's
+
+*.ca
+*.com
+*.net
+*.co.uk
+
+# Filter by FQDN
+
+#*.facebook.com
 #*.windowsupdate.com
 #*.microsoft.com
-#digg.com
-#pintumbler.org
+#*.dropbox.com
+#*.google.ca
+#*.google.com
+#*.org
