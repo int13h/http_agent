@@ -17,7 +17,7 @@ This agent adds HTTP events to Sguil
 
 1) Download httpry_agent: 
 
-~$ git clone https://int13h@github.com/int13h/httpry_agent.git
+`git clone https://github.com/int13h/httpry_agent.git`
 
 2) Install and configure httpry:
 
@@ -33,7 +33,7 @@ The agent tails the output of httpry and feeds matching lines to Sguild.
 
 Start httpry with something like:
 
-~# httpry -f timestamp,source-ip,dest-ip,method,host,request-uri,referer,user-agent -i bce0 -d -o /nsm/httpry/url.log
+`httpry -f timestamp,source-ip,dest-ip,method,host,request-uri,referer,user-agent -i bce0 -d -o /nsm/httpry/url.log`
 
 There is an exclusions file which can be used in one of two ways:
 
@@ -66,6 +66,9 @@ There is an exclusions file which can be used in one of two ways:
 
 2) The events use a signature ID of 420042, event class "misc-activity" and protocol 150 (unused)
 
+3) Filtering needs work (features) payload for example
 
-3) This is beta. It might break things.
+4) Need to do log management for httpry
+
+5) This is beta. It might break things.
 
