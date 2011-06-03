@@ -1,4 +1,4 @@
-# Rename this file to httpr_agent.exlude
+# Rename this file to httpry_agent.exclude
 # Place the domain names or IP addresses that you want 
 # to exclude (or include) from processing in this file. 
 # 
