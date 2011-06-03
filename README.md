@@ -43,20 +43,19 @@ There is an exclusions file which can be used in one of two ways:
 2) If INVERT_MATCH is set to 1 in httpry_agent.conf anything that matches an entry in
    httpry_agent.exclude will be sent to Sguild.
 
-Example 1: Match everything from the following TLD's (INVERT_MATCH set to 1)
+**Example 1: Match everything from the following TLD's (INVERT_MATCH set to 1)**
 
-`
-*.ua
-*.ru
-*.cn
-*.lv
-`
+	*.ua
+	*.ru
+	*.cn
+	*.lv
 
-Example 2: Ignore everything from the following FQDN's (INVERT_MATCH set to 0)
 
-`*.facebook.com`
-`*.dropbox.com`
-`*.twitter.com`
+**Example 2: Ignore everything from the following FQDN's (INVERT_MATCH set to 0)**
+
+	*.facebook.com
+	*.dropbox.com
+	*.twitter.com
 
 ## Notes
 
