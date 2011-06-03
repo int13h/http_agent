@@ -1,4 +1,4 @@
-# httpry_agent - A HTTP request agent for Sguil
+# httpry_agent - HTTP request agent for Sguil
 
 
 ## Description
