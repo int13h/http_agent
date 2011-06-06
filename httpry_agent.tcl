@@ -162,14 +162,15 @@ proc ProcessData { line } {
         set domParts [lreverse [split $cleanHost "."] ]
         set partCount [llength $domParts]
         set pHits 0
+        set rList ""
+        set fList ""
 
         # Run through each segment and see if we match anything
-        for { set i 0 } { $i < $partCount } { incr i } {
+        for { set i 0 } { $i <= $partCount } { incr i } {
 
             lappend rList [lindex $domParts $i]
             set fList [lreverse $rList]
             set theNeedle [join $fList "."]
-
             # Check for a broad hit in our haystack
             set stackHit [lsearch $HAYSTACK *$theNeedle]
 
@@ -191,7 +192,7 @@ proc ProcessData { line } {
 
             }
             # If we didn't hit here, there is no match
-            if { $i == 2 && $stackHit == -1 } {
+            if { $i == 1 && $stackHit == -1 } {
 
                 set i $partCount
 
@@ -210,36 +211,36 @@ proc ProcessData { line } {
 
         }
         
-        # If we missed our stack, we add the entry
-        if { $aMatch == 0 } {
 
+        # If we missed our stack, we add the entry
+        if { $aMatch == 0 && $INVERT_MATCH != 1 } {
+        
             if { $EMPTY_HOST == 1 && $host == "-" } {
 
-                set addEntry "no"
-
+                set addEntry 0   
+                    
             } else {
-
-                set addEntry "yes"
-
+                
+                set addEntry 1
+                    
             }
- 
+
         # If we hit
         } else {
             
-            if { $INVERT_MATCH == 1 } {
-
-                set addEntry "yes"
-
+            if { $aMatch == 1 && $INVERT_MATCH == 1 } {
+        
+                set addEntry 1
+        
             } else {
-
-                set addEntry "no"
-
+        
+                set addEntry 0
+        
             }
-
+    
         }
-
-
-        if { $addEntry == "yes" } {
+ 
+        if { $addEntry == 1 } {
 
             set message "URL $host"
             set sig_id "420042"
