@@ -599,6 +599,7 @@ if { ![info exists EXCLUDE] } {
     }
 
     set efp [open $EXCLUDE r]
+    set HAYSTACK ""
 
     while { [gets $efp line] >= 0 } {
 
