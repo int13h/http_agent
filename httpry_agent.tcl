@@ -135,7 +135,9 @@ proc ProcessData { line } {
 
         ^(\d\d\d\d-\d\d-\d\d\s\d\d:\d\d:\d\d)\s+        # timestamp
         (\d+\.\d+\.\d+\.\d+)\s+                         # src ip
+        (\d+)\s+					# src port
         (\d+\.\d+\.\d+\.\d+)\s+                         # dst ip
+        (\d+)\s+                                        # dst port 
         (\S+)\s+                                        # method
         (\S+)\s+                                        # host
         (\S+)\s+                                        # request_uri
@@ -143,13 +145,15 @@ proc ProcessData { line } {
         (.*$)                                           # user_agent
 
 
-            } $line match timestamp src_ip dst_ip method host request_uri referer user_agent] } {
+            } $line match timestamp src_ip src_port dst_ip dst_port method host request_uri referer user_agent] } {
 
         if { $DEBUG } {
             puts "\nMatch:\n"
             puts "$timestamp\n"
             puts "$src_ip\n"
+            puts "$src_port\n"
             puts "$dst_ip\n"
+            puts "$dst_port\n"
             puts "$method\n"
             puts "$host\n"
             puts "$request_uri\n"
@@ -158,7 +162,8 @@ proc ProcessData { line } {
         }
         
         # Strip protocol and break the FQDN down
-        regsub {^http://} $host "" cleanHost
+        regsub {^http://} $host "" host
+        regsub {:.*$} $host "" cleanHost
         set domParts [lreverse [split $cleanHost "."] ]
         set partCount [llength $domParts]
         set pHits 0
@@ -254,7 +259,7 @@ proc ProcessData { line } {
     
             # Build the event to send
             set event [list GenericEvent 0 $priority $class $HOSTNAME $nDate $AGENT_ID $NEXT_EVENT_ID \
-                       $NEXT_EVENT_ID [string2hex $message] $src_ip $dst_ip 150 0 0       \
+                       $NEXT_EVENT_ID [string2hex $message] $src_ip $dst_ip 6 $src_port $dst_port \
                        $GEN_ID $sig_id $rev [string2hex $detail]]
     
             # Send the event to sguild
