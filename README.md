@@ -25,7 +25,7 @@ This agent adds HTTP events to Sguil
   - If your sensor is not set to UTC you will need make a change to httpry.c on line 353,
     swap "localtime()" with "gmtime()" and recompile.
   - you need to start httpry with the following format structure (-f):
-    timestamp,source-ip,dest-ip,method,host,request-uri,referer,user-agent
+    timestamp,source-ip,source-port,dest-ip,dest-port,method,host,request-uri,referer,user-agent
 
 ## Operation
 
@@ -33,7 +33,7 @@ The agent tails the output of httpry and feeds matching lines to Sguild.
 
 Start httpry with something like:
 
-`httpry -f timestamp,source-ip,dest-ip,method,host,request-uri,referer,user-agent -i bce0 -d -o /nsm/httpry/url.log`
+`httpry -f timestamp,source-ip,source-ports,dest-ip,dest-port,method,host,request-uri,referer,user-agent -i bce0 -d -o /nsm/httpry/url.log`
 
 There is an exclusions file which can be used in one of two ways:
 
@@ -64,7 +64,7 @@ There is an exclusions file which can be used in one of two ways:
 
    none||ANY||ANY||ANY||ANY||ANY||ANY||%%REGEXP%%^URL||1
 
-2) The events use a signature ID of 420042, event class "misc-activity" and protocol 150 (unused)
+2) The events use a signature ID of 420042, event class "misc-activity"
 
 3) Filtering needs work (features) payload for example
 
