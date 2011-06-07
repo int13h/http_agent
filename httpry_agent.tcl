@@ -584,7 +584,7 @@ if { [info exists CONF_FILE] } {
 
 }
 
-# Build exclusion list
+# Check for exclusions list
 if { ![info exists EXCLUDE] } {
 
     # No exclude file specified check the defaults
@@ -603,6 +603,10 @@ if { ![info exists EXCLUDE] } {
         DisplayUsage $argv0
 
     }
+
+}
+
+if { [info exists EXCLUDE] } {
 
     set efp [open $EXCLUDE r]
     set HAYSTACK ""
