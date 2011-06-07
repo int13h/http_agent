@@ -247,7 +247,7 @@ proc ProcessData { line } {
             set rev "1"
             set priority 3
             set class "misc-activity"
-            set detail "$method || $host || $request_uri || $referer || $user_agent"
+            set detail "$method || $host$request_uri || $referer || $user_agent"
 
             # Convert date to YY-MM-DD HH:MM:SS format
             set nDate [clock format [clock scan "$timestamp" -gmt true] -gmt true -f "%Y-%m-%d %T"]
