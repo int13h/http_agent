@@ -33,7 +33,7 @@ The agent tails the output of httpry and feeds matching lines to Sguild.
 
 Start httpry with something like:
 
-`httpry -f timestamp,source-ip,source-ports,dest-ip,dest-port,method,host,request-uri,referer,user-agent -i bce0 -d -o /nsm/httpry/url.log`
+`httpry -f timestamp,source-ip,source-port,dest-ip,dest-port,method,host,request-uri,referer,user-agent -i bce0 -d -o /nsm/httpry/url.log`
 
 There is an exclusions file which can be used in one of two ways:
 
