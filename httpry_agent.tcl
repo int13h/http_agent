@@ -252,6 +252,7 @@ proc ProcessData { line } {
             set rev "1"
             set priority 3
             set class "misc-activity"
+            set proto 6
             set detail "$method || $host$request_uri || $referer || $user_agent"
 
             # Convert date to YY-MM-DD HH:MM:SS format
@@ -259,7 +260,7 @@ proc ProcessData { line } {
     
             # Build the event to send
             set event [list GenericEvent 0 $priority $class $HOSTNAME $nDate $AGENT_ID $NEXT_EVENT_ID \
-                       $NEXT_EVENT_ID [string2hex $message] $src_ip $dst_ip 6 $src_port $dst_port \
+                       $NEXT_EVENT_ID [string2hex $message] $src_ip $dst_ip $proto $src_port $dst_port \
                        $GEN_ID $sig_id $rev [string2hex $detail]]
     
             # Send the event to sguild
