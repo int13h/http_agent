@@ -72,3 +72,8 @@ There is an exclusions file which can be used in one of two ways:
 
 5) This is beta. It might break things.
 
+
+## Observations
+
+1) I dont think that the exclusions mechanism is very efficient (big surprise) I need to re-write it. I currently have the
+   agent processing a little under 6 Million requests a day and the agent fluctuates between 16-28% CPU utilization.
