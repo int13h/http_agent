@@ -77,3 +77,6 @@ There is an exclusions file which can be used in one of two ways:
 
 1) I dont think that the exclusions mechanism is very efficient (big surprise) I need to re-write it. I currently have the
    agent processing a little under 6 Million requests a day and the agent fluctuates between 16-28% CPU utilization.
+
+2) It would be really nice if there was another column in Sguil's event table to put the URI instead of blobbing it in the 
+   data table.
