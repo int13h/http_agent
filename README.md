@@ -31,7 +31,7 @@ This agent adds HTTP events to Sguil
 
 The agent tails the output of httpry and feeds matching lines to Sguild.
 
-Start httpry with something like:
+Start httpry with something like (pay particular attention to the format string):
 
 `httpry -f timestamp,source-ip,source-port,dest-ip,dest-port,method,host,request-uri,referer,user-agent -i bce0 -d -o /nsm/httpry/url.log`
 
