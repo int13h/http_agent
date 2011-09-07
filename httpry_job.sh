@@ -1,4 +1,7 @@
 #!/usr/local/bin/bash
+# This script will restart httpry and httpry_agent every 24 hours. 
+# Run it with a cron line like this:
+# 0       0       *       *       *       httpry_job.sh > /dev/null 2>&1
 
 # network interface
 interface="bce1"
