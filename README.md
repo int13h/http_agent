@@ -27,9 +27,10 @@ This agent adds HTTP events to Sguil
   - you need to start httpry with the following format structure (-f):
     timestamp,source-ip,source-port,dest-ip,dest-port,method,host,request-uri,referer,user-agent
 
-3) I made a little [shell script](https://github.com/int13h/httpry_agent/blob/master/httpry_job.sh) that will make httpry's output a little easier to manage. The script is intended to be called
-   by cron each day at midnight. When it runs it will create a new daily directory and start a new httpry process, spooling
-   to this directory followed by the terminating of the old process. My bash sucks but it should be enough to get you going. 
+3) I made a little [shell script](https://github.com/int13h/httpry_agent/blob/master/httpry_job.sh) that will make httpry's output a 
+little easier to manage. The script is intended to be called by cron each day at midnight. When it runs it will create a new daily 
+directory and start a new httpry process; spooling to this directory. Once complete, it terminates the old process. 
+My bash sucks but it should be enough to get you going. 
 
 ## Operation
 
