@@ -291,9 +291,15 @@ proc ProcessData { line } {
     
             if { [llength $response] != 2 || [lindex $response 0] != "ConfirmEvent" || [lindex $response 1] != $NEXT_EVENT_ID } {
     
-                # Not a confirmation. Fatal error.
-                puts "Fatal error: Expected => ConfirmEvent $NEXT_EVENT_ID   got => $response"
-                exit 1
+               # Send to sguild failed
+               if { $DEBUG } { puts "Recv Failed" }
+
+               # Close open socket
+               catch {close $sguildSocketID}
+
+               # Reconnect loop
+               while { ![ConnectToSguilServer] } { after 15000 }
+               return 0                
     
             }
     
