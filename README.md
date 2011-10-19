@@ -44,6 +44,10 @@ My bash sucks but it should be enough to get you going.
 
 The agent tails the output of the specified log file and feeds matching lines to Sguild.
 
+The log format is set via http_agent.conf (last line):
+
+"LOG_FORMAT httpry" OR "LOG_FORMAT suricata"
+
 You need to start httpry with the following format string:
 
 `httpry -f timestamp,source-ip,source-port,dest-ip,dest-port,method,host,request-uri,referer,user-agent -i bce0 -d -o /nsm/httpry/url.log`
