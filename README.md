@@ -1,25 +1,29 @@
-# httpry_agent - HTTP request agent for Sguil
+# http_agent - HTTP request agent for Sguil
 
 
 ## Description
 
-This agent adds HTTP events to Sguil
+This agent adds HTTP events to Sguil. This agent can process httpry or Suricata(http) output.
 
 
 ## Requirements
 
 * Sguil: [http://sguil.sourceforge.net/](http://sguil.sourceforge.net/)
 
-* httpry : [http://dumpsterventures.com/jason/httpry/](http://dumpsterventures.com/jason/httpry/)
+* httpry: [http://dumpsterventures.com/jason/httpry/](http://dumpsterventures.com/jason/httpry/)
+
+* Suricata: [http://www.openinfosecfoundation.org/index.php/downloads](http://www.openinfosecfoundation.org/index.php/downloads)
 
 
 ## Install
 
-1) Download httpry_agent: 
+1) Download http_agent: 
 
-`git clone https://github.com/int13h/httpry_agent.git`
+`git clone https://github.com/int13h/http_agent.git`
 
-2) Install and configure httpry:
+2) Install and configure 
+
+  a) httpry:
 
   - You can find it here (versions < 0.1.5 wont work): [http://dumpsterventures.com/jason/httpry/httpry-0.1.5.tar.gz](http://dumpsterventures.com/jason/httpry/httpry-0.1.5.tar.gz)
   - If your sensor is not set to UTC you will need make a change to httpry.c on line 353,
@@ -27,26 +31,30 @@ This agent adds HTTP events to Sguil
   - you need to start httpry with the following format structure (-f):
     timestamp,source-ip,source-port,dest-ip,dest-port,method,host,request-uri,referer,user-agent
 
-3) I made a little [shell script](https://github.com/int13h/httpry_agent/blob/master/httpry_job.sh) that will make httpry's output a 
+  b) Suricata:
+  - Edit suricata.yaml and under "- http-log:" set "enabled: yes"
+  
+
+3) I made a little [shell script](https://github.com/int13h/http_agent/blob/master/http_job.sh) that will make httpry's output a 
 little easier to manage. The script is intended to be called by cron each day at midnight. When it runs it will create a new daily 
 directory and start a new httpry process; spooling to this directory. Once complete, it terminates the old process. 
 My bash sucks but it should be enough to get you going. 
 
 ## Operation
 
-The agent tails the output of httpry and feeds matching lines to Sguild.
+The agent tails the output of the specified log file and feeds matching lines to Sguild.
 
-Start httpry with something like (pay particular attention to the format string):
+You need to start httpry with the following format string:
 
 `httpry -f timestamp,source-ip,source-port,dest-ip,dest-port,method,host,request-uri,referer,user-agent -i bce0 -d -o /nsm/httpry/url.log`
 
 There is an exclusions file which can be used in one of two ways:
 
-1) If INVERT_MATCH is set to 0 in httpry_agent.conf anything that matches an entry in
-   httpry_agent.exclude will be ignored.
+1) If INVERT_MATCH is set to 0 in http_agent.conf anything that matches an entry in
+   http_agent.exclude will be ignored.
 
-2) If INVERT_MATCH is set to 1 in httpry_agent.conf anything that matches an entry in
-   httpry_agent.exclude will be sent to Sguild.
+2) If INVERT_MATCH is set to 1 in http_agent.conf anything that matches an entry in
+   http_agent.exclude will be sent to Sguild.
 
 **Example 1: Match everything from the following TLD's (INVERT_MATCH set to 1)**
 
@@ -73,9 +81,7 @@ There is an exclusions file which can be used in one of two ways:
 
 3) Filtering needs work (features) payload for example
 
-4) Need to do log management for httpry
-
-5) This is beta. It might break things.
+4) This is beta. It might break things.
 
 
 ## Observations
