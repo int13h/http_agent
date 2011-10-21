@@ -32,7 +32,9 @@ This agent adds HTTP events to Sguil. This agent can process httpry or Suricata(
     timestamp,source-ip,source-port,dest-ip,dest-port,method,host,request-uri,referer,user-agent
 
   b) Suricata:
+
   - Edit suricata.yaml and under "- http-log:" set "enabled: yes"
+  - You will need to patch log-httplog.c with the following [patch](https://redmine.openinfosecfoundation.org/attachments/588/log-httplog.c.patch)
   
 
 3) I made a little [shell script](https://github.com/int13h/http_agent/blob/master/http_job.sh) that will make httpry's output a 
