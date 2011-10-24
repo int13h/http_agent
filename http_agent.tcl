@@ -178,50 +178,58 @@ proc ProcessData { line } {
         # ts looks like: 10/18/11-14:26:51.531465<space>host..
         # timestamp host,request_uri,user_agent,referer,method,protocol,code,bytes,src_ip:src_port -> dst_ip:dst_port
 
-        # Change delimiter to pipe
-        set newline [string map {" \[**\] " | " -> " |} $line]
-        set parts [split $newline "|"]
+        if { [regexp -expanded {
 
-        lassign $parts _timehost request_uri user_agent referer method proto_ver code bytes _src _dst
+            ^(\d\d/\d\d/\d\d-\d\d:\d\d:\d\d.\d+)\s+     # timestamp
+            (.+?)\s\[\*\*\]\s                           # host
+            (\S+)\s\[\*\*\]\s                           # request_uri
+            (.+?)\s\[\*\*\]\s                           # user_agent
+            (.+?)\s\[\*\*\]\s                           # referer
+            (\S+)\s\[\*\*\]\s                           # method
+            (\S+)\s\[\*\*\]\s                           # proto_ver
+            (\S+)\s\[\*\*\]\s                           # code
+            (.+?)\s\[\*\*\]\s                           # bytes
+            (\S+)\s->\s                                 # src
+            (.*$)                                       # dst
 
-        # Timestamp and host
-        set parts [split $_timehost " "]
 
-        lassign $parts _timestamp host
+                } $line match _timestamp host request_uri user_agent referer method proto_ver code bytes _src _dst] } {
 
-        # Clean timestamp
-        set timestamp [string map {- " "} [lindex [split $_timestamp .] 0]]
+            # Convert date to YY-MM-DD HH:MM:SS format
+            set timestamp [string map {- " "} [lindex [split $_timestamp .] 0]]
+            set nDate [clock format [clock scan "$timestamp" -gmt true] -gmt true -f "%Y-%m-%d %T"]
 
-        # Source address and port
-        set parts [split $_src ":"]
+            # Source address and port
+            set parts [split $_src ":"]
 
-        lassign $parts src_ip src_port
+            lassign $parts src_ip src_port
 
-        # Destination address and port
-        set parts [split $_dst ":"]
+            # Destination address and port
+            set parts [split $_dst ":"]
 
-        lassign $parts dst_ip dst_port
+            lassign $parts dst_ip dst_port
 
-        if { $DEBUG } {
-            puts "\n----"
-            puts "Timestamp: $timestamp"
-            puts "Host: $host"
-            puts "URI: $request_uri"
-            puts "UserAgent: $user_agent"
-            puts "Referer: $referer"
-            puts "Method: $method"
-            puts "Protocol: $proto_ver"
-            puts "Code: $code"
-            puts "Bytes: $bytes"
-            puts "SrcIP: $src_ip"
-            puts "SrcPort: $src_port"
-            puts "DstIP: $dst_ip"
-            puts "DstPort: $dst_port"
+            if { $DEBUG } {
+                puts "\n----"
+                puts "Timestamp: $timestamp ($nDate)"
+                puts "Host: $host"
+                puts "URI: $request_uri"
+                puts "UserAgent: $user_agent"
+                puts "Referer: $referer"
+                puts "Method: $method"
+                puts "Protocol: $proto_ver"
+                puts "Code: $code"
+                puts "Bytes: $bytes"
+                puts "SrcIP: $src_ip"
+                puts "SrcPort: $src_port"
+                puts "DstIP: $dst_ip"
+                puts "DstPort: $dst_port"
+            }
+
+            set detail "$method || $host$request_uri || $referer || $user_agent || $proto_ver || $code || $bytes"
+            set GO 1
+
         }
-
-        set detail "$method || $host$request_uri || $referer || $user_agent || $proto_ver || $code || $bytes"
-        set GO 1
-
     }
 
     if { $GO == 1 } {
