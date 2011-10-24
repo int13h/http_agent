@@ -1,4 +1,4 @@
-http_config.tcl
-http_exclude.tcl
+http_config.conf
+http_exclude.conf
 test.tcl
 test1.tcl
