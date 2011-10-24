@@ -353,9 +353,15 @@ proc ProcessData { line } {
             # Sguild response should be "ConfirmEvent eventID"
             if { [catch {gets $sguildSocketID response} readError] } {
     
-                # Error getting a response. This one is fatal.
-                puts "Fatal error: $readError"
-                exit 1
+                # Couldn't read from sguild
+                if { $DEBUG } { puts "Read Failed: $readError" }
+
+                # Close open socket
+                catch {close $sguildSocketID}
+
+                # Reconnect loop
+                while { ![ConnectToSguilServer] } { after 15000 }
+                return 0
     
             }
 
