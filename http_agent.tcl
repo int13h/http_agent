@@ -120,6 +120,42 @@ proc ReadFile { fileID } {
 }
 
 #
+# FourSix: Check IP version
+#
+proc FourSix { ip_port } {
+
+    # Until sguil supports ipv6 we just return 0.0.0.0 for v6 addresses
+
+    # v4
+    if { [regexp -expanded {
+
+            ^(\d+\.\d+\.\d+\.\d+):      # ip
+            (.*$)                       # port
+
+                } $ip_port match ip port ] } {
+
+        return "$ip|$port"
+    }
+
+    # v6
+    if { [regexp -expanded {
+
+            ^([0-9A-f]{4}:[0-9A-f]{4}:[0-9A-f]{4}:[0-9A-f]{4}:[0-9A-f]{4}:[0-9A-f]{4}:[0-9A-f]{4}:[0-9A-f]{4}): # ip
+            (.*$)                                                                                               # port
+
+                } $ip_port match ip port ] } {
+
+        return "0.0.0.0|$port"
+
+    }
+
+    return "0.0.0.0|0"
+
+
+}
+
+
+#
 # ProcessData: Here we actually process the line
 #
 proc ProcessData { line } {
@@ -150,7 +186,17 @@ proc ProcessData { line } {
             (.*$)					# user_agent
 
 
-                } $line match timestamp src_ip src_port dst_ip dst_port method host request_uri referer user_agent] } {
+                } $line match timestamp _src_ip _src_port _dst_ip _dst_port method host request_uri referer user_agent] } {
+
+            # Source address and port
+            set parts [split [FourSix "$_src_ip:_$src_port"] "|"]
+
+            lassign $parts src_ip src_port
+
+            # Destination address and port
+            set parts [split [FourSix "$_dst_ip:_$dst_port"] "|"]
+
+            lassign $parts dst_ip dst_port
 
             if { $DEBUG } {
                 puts "\n----"
@@ -200,12 +246,12 @@ proc ProcessData { line } {
             set nDate [clock format [clock scan "$timestamp" -gmt true] -gmt true -f "%Y-%m-%d %T"]
 
             # Source address and port
-            set parts [split $_src ":"]
+            set parts [split [FourSix $_src] "|"]
 
             lassign $parts src_ip src_port
 
             # Destination address and port
-            set parts [split $_dst ":"]
+            set parts [split [FourSix $_dst] "|"]
 
             lassign $parts dst_ip dst_port
 
