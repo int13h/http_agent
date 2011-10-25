@@ -189,12 +189,12 @@ proc ProcessData { line } {
                 } $line match timestamp _src_ip _src_port _dst_ip _dst_port method host request_uri referer user_agent] } {
 
             # Source address and port
-            set parts [split [FourSix "$_src_ip:_$src_port"] "|"]
+            set parts [split [FourSix "$_src_ip:$_src_port"] "|"]
 
             lassign $parts src_ip src_port
 
             # Destination address and port
-            set parts [split [FourSix "$_dst_ip:_$dst_port"] "|"]
+            set parts [split [FourSix "$_dst_ip:$_dst_port"] "|"]
 
             lassign $parts dst_ip dst_port
 
