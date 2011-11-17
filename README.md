@@ -3,7 +3,7 @@
 
 ## Description
 
-This agent adds HTTP events to Sguil. This agent can process httpry or Suricata(http) output.
+This agent adds HTTP events to Sguil. This agent can process httpry, Suricata(http) and Bro(http) output.
 
 
 ## Requirements
@@ -13,6 +13,8 @@ This agent adds HTTP events to Sguil. This agent can process httpry or Suricata(
 * httpry: [http://dumpsterventures.com/jason/httpry/](http://dumpsterventures.com/jason/httpry/)
 
 * Suricata: [http://www.openinfosecfoundation.org/index.php/downloads](http://www.openinfosecfoundation.org/index.php/downloads)
+
+* Bro: [http://bro-ids.org/](http://bro-ids.org/)
 
 
 ## Install
@@ -48,7 +50,7 @@ The agent tails the output of the specified log file and feeds matching lines to
 
 The log format is set via http_agent.conf (last line):
 
-"LOG_FORMAT httpry" OR "LOG_FORMAT suricata"
+"LOG_FORMAT httpry" OR "LOG_FORMAT suricata" OR "LOG_FORMAT bro"
 
 You need to start httpry with the following format string:
 

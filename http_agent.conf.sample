@@ -4,7 +4,7 @@
 
 # DEBUG is VERY chatty. Use it only when needed.
 # 1=on 0=off
-set DEBUG 1
+set DEBUG 0
 
 # Run in background
 # 1=yes 0=no
@@ -35,7 +35,6 @@ set INVERT_MATCH 0
 set EMPTY_HOST 1
 
 # LOG_FORMAT
-# Httpry and Suricata's output formats are supported
-# httpry or suricata
+# httpry or suricata or bro
 
-set LOG_FORMAT suricata
+set LOG_FORMAT bro

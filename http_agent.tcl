@@ -188,6 +188,9 @@ proc ProcessData { line } {
 
                 } $line match timestamp _src_ip _src_port _dst_ip _dst_port method host request_uri referer user_agent] } {
 
+            # Format timestamp
+            set nDate [clock format [clock scan "$timestamp" -gmt true] -gmt true -f "%Y-%m-%d %T"]
+
             # Source address and port
             set parts [split [FourSix "$_src_ip:$_src_port"] "|"]
 
@@ -213,7 +216,7 @@ proc ProcessData { line } {
             }
             
 
-            set detail "$method || $host$request_uri || $referer || $user_agent"
+            set detail "Method: $method Host: $host URI: $request_uri Referrer: $referer UA: $user_agent"
             set GO 1
 
         }
@@ -241,7 +244,7 @@ proc ProcessData { line } {
 
                 } $line match _timestamp host request_uri user_agent referer method proto_ver code bytes _src _dst] } {
 
-            # Convert date to YY-MM-DD HH:MM:SS format
+            # Format timestamp
             set timestamp [string map {- " "} [lindex [split $_timestamp .] 0]]
             set nDate [clock format [clock scan "$timestamp" -gmt true] -gmt true -f "%Y-%m-%d %T"]
 
@@ -272,7 +275,74 @@ proc ProcessData { line } {
                 puts "DstPort: $dst_port"
             }
 
-            set detail "$method || $host$request_uri || $referer || $user_agent || $proto_ver || $code || $bytes"
+            set detail "Method: $method Host: $host URI: $request_uri Referrer: $referer UA: $user_agent Protocol: $proto_ver Status Code: $code Bytes: $bytes"
+            set GO 1
+
+        }
+    }
+
+    if { $LOG_FORMAT == "bro" } {
+        # We are reading bro. Delimiter is \x09
+        # ts looks like: 1258405046.322848
+        # ts,uid,id.orig_h,id.orig_p,id.resp_h,id.resp_p,trans_depth,method,host,uri,referrer,user_agent,request_body_len, \
+        # response_body_len,status_code,status_msg,info_code,info_msg,filename,tags,username,password,proxied,mime_type,md5, \
+        # extraction_file
+
+        set fields [split $line '\t']
+
+        if { [llength $fields] == 26 } {
+
+            lassign $fields \
+                _timestamp uid _src_ip _src_port _dst_ip _dst_port trans_depth method host request_uri referer user_agent \
+                request_body_len response_body_len status_code status_msg info_code info_msg filename tags username \
+                password proxied mime_type md5 extraction_file
+
+            # Format timestamp
+            set timestamp [lindex [split $_timestamp .] 0]
+            set nDate [clock format "$timestamp" -gmt true -f "%Y-%m-%d %T"]
+
+            # Source address and port
+            set parts [split [FourSix "$_src_ip:$_src_port"] "|"]
+
+            lassign $parts src_ip src_port
+
+            # Destination address and port
+            set parts [split [FourSix "$_dst_ip:$_dst_port"] "|"]
+
+            lassign $parts dst_ip dst_port
+
+            if { $DEBUG } {
+                puts "\n----"
+                puts "Timestamp: $timestamp ($nDate)"
+                puts "UID: $uid"
+                puts "SrcIP: $src_ip"
+                puts "SrcPort: $src_port"
+                puts "DstIP: $dst_ip"
+                puts "DstPort: $dst_port"
+                puts "TransDepth: $trans_depth"
+                puts "Method: $method"
+                puts "Host: $host"
+                puts "URI: $request_uri"
+                puts "Referer: $referer" 
+                puts "UserAgent: $user_agent"
+                puts "ReqBodyLength: $request_body_len"
+                puts "ResBodyLength: $response_body_len"
+                puts "Status Code: $status_code"
+                puts "Status Msg.: $status_msg"
+                puts "Info Code: $info_code"
+                puts "Info Msg: $info_msg"
+                puts "Filename: $filename"
+                puts "Tags: $tags"
+                puts "Username: $username"
+                puts "Password: $password"
+                puts "Proxied: $proxied"
+                puts "MIME Type: $mime_type"
+                puts "MD5: $md5"
+                puts "ExtractionFile: $extraction_file"
+            }
+
+            set detail "Method: $method Host: $host URI: $request_uri Referrer: $referer UA: $user_agent Trans Depth: $trans_depth Request Body Length: $request_body_len Response Body Length: $response_body_len Status Code: $status_code Status Message: $status_msg Info Code: $info_code Info Message: $info_msg Filename: $filename Tags: $tags Username: $username Password: $password Proxied: $proxied MIME Type: $mime_type MD5: $md5 Extraction File: $extraction_file UID: $uid"
+
             set GO 1
 
         }
@@ -373,9 +443,6 @@ proc ProcessData { line } {
             set class "misc-activity"
             set proto 6
 
-            # Convert date to YY-MM-DD HH:MM:SS format
-            set nDate [clock format [clock scan "$timestamp" -gmt true] -gmt true -f "%Y-%m-%d %T"]
-    
             # Build the event to send
             set event [list GenericEvent 0 $priority $class $HOSTNAME $nDate $AGENT_ID $NEXT_EVENT_ID \
                        $NEXT_EVENT_ID [string2hex $message] $src_ip $dst_ip $proto $src_port $dst_port \
