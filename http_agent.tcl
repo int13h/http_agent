@@ -226,7 +226,7 @@ proc ProcessData { line } {
 
         if { [regexp -expanded {
 
-            ^(\d\d/\d\d/\d\d-\d\d:\d\d:\d\d.\d+)\s+     # timestamp
+            ^(\d\d/\d\d/\d\d-\d{2,4}:\d\d:\d\d.\d+)\s+  # timestamp
             (.+?)\s\[\*\*\]\s                           # host
             (\S+)\s\[\*\*\]\s                           # request_uri
             (.+?)\s\[\*\*\]\s                           # user_agent
